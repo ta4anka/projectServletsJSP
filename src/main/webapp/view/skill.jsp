@@ -10,7 +10,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <title>List of All Skills</title>
+    <title>Skills</title>
 </head>
 <body>
 
@@ -19,9 +19,11 @@
 </div>
 
 <div align="center">
-    <form action="skill" method="post">
+    <form method ="post">
         <%--the value of atribute 'name' is used in getParameter() method--%>
+        <label>name:
         <input class="w3-input w3-animate-input" type="text" style="width:30%"  name="nameOfSkill"><br />
+        </label>
             <button class="w3-btn w3-grey w3-round-medium" type="submit" name="button" value="add">add new skill</button>
     </form>
 
