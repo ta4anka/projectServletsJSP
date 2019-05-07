@@ -1,7 +1,8 @@
 <%@ page import="model.Project" %>
 <%@ page import="java.util.List" %>
-<%@ page import="controller.TeamController" %>
-<%@ page import="model.Team" %><%--
+<%@ page import="model.Team" %>
+<%@ page import="repository.TeamRepository" %>
+<%@ page import="repository.hibernate.HibernateTeamRepositoryImpl" %><%--
   Created by IntelliJ IDEA.
   Team: maya
   Date: 06.05.19
@@ -32,8 +33,8 @@
 
         <label>Teams for project:
             <table>
-                <% TeamController uc = new TeamController();
-                    List<Team> teams = uc.findAll();
+                <% TeamRepository tr = new HibernateTeamRepositoryImpl();
+                    List<Team> teams = tr.findAll();
                     for (Team t : teams){ %>
                 <tr>
                     <td><input type="checkbox" name="names" value ="<%=t.getId()%>"><%=t.getName()%></td>

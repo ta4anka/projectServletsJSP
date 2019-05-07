@@ -1,5 +1,7 @@
-<%@ page import="controller.ProjectController" %>
-<%@ page import="model.Project" %><%--
+
+<%@ page import="model.Project" %>
+<%@ page import="repository.ProjectRepository" %>
+<%@ page import="repository.hibernate.HibernateProjectRepositoryImpl" %><%--
   Created by IntelliJ IDEA.
   User: maya
   Date: 06.05.19
@@ -18,9 +20,9 @@
 
         <table border="1" cellpadding="10">
             <caption><h3>Edit Project</h3></caption>
-            <% ProjectController pc =new ProjectController();
+            <% ProjectRepository pr =new HibernateProjectRepositoryImpl();
                 int idForEdit = Integer.parseInt(request.getParameter("projectId"));
-                Project projectForEdit = pc.getById(idForEdit);%>
+                Project projectForEdit = pr.getById(idForEdit);%>
             <tr>
                 <th>id of project:</th>
                 <td>

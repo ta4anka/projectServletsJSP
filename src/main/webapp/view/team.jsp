@@ -1,7 +1,9 @@
 <%@ page import="model.Team" %>
 <%@ page import="java.util.List" %>
-<%@ page import="controller.UserController" %>
-<%@ page import="model.User" %><%--
+
+<%@ page import="model.User" %>
+<%@ page import="repository.UserRepository" %>
+<%@ page import="repository.hibernate.HibernateUserRepositoryImpl" %><%--
   Created by IntelliJ IDEA.
   User: maya
   Date: 06.05.19
@@ -29,8 +31,8 @@
 
             <label>Users for team:
                 <table>
-                    <% UserController uc = new UserController();
-                        List<User> users = uc.findAll();
+                    <% UserRepository ur = new HibernateUserRepositoryImpl();
+                        List<User> users = ur.findAll();
                         for (User u : users){ %>
                     <tr>
                         <td><input type="checkbox" name="names" value ="<%=u.getId()%>"><%=u.getFirstName() + " " + u.getLastName()%></td>

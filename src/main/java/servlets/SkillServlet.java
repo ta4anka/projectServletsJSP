@@ -1,7 +1,9 @@
 package servlets;
 
-import controller.SkillController;
+
 import model.Skill;
+import repository.SkillRepository;
+import repository.hibernate.HibernateSkillRepositoryImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class SkillServlet extends javax.servlet.http.HttpServlet {
-    private SkillController sc = new SkillController();
+    private SkillRepository sr = new HibernateSkillRepositoryImpl();
     private Skill skillToSave = new Skill();
 
     @Override
@@ -24,7 +26,7 @@ public class SkillServlet extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
             throws IOException, ServletException {
         String button = request.getParameter("button");
-        System.out.println("button = " + button);
+        System.out.println("button = " + button); // for debugging TODO --> DELETE
 
         switch(button){
             case "add":
@@ -43,7 +45,7 @@ public class SkillServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void listSkill(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Skill> skillList = sc.findAll();
+        List<Skill> skillList = sr.findAll();
         request.setAttribute("listOfSkill",skillList);
         RequestDispatcher requestDispatcher  = request.getRequestDispatcher("view/skill.jsp");
         requestDispatcher.forward(request,response);
@@ -52,7 +54,7 @@ public class SkillServlet extends javax.servlet.http.HttpServlet {
     private void addSkill(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String name = request.getParameter("nameOfSkill");
         skillToSave.setName(name);
-        sc.save(skillToSave);
+        sr.save(skillToSave);
         response.sendRedirect("skill");
     }
 
@@ -66,7 +68,7 @@ public class SkillServlet extends javax.servlet.http.HttpServlet {
         String nameOfUpdatedSkill = request.getParameter("nameOfUpdatedSkill");
         skillToSave.setId(id);
         skillToSave.setName(nameOfUpdatedSkill);
-        sc.update(skillToSave);
+        sr.update(skillToSave);
         response.sendRedirect("skill");
     }
 
@@ -75,7 +77,7 @@ public class SkillServlet extends javax.servlet.http.HttpServlet {
         String strId = request.getParameter("skillId");
         System.out.println("ID of deleting skill =   " + strId); // for debugging TODO --> DELETE
         int id = Integer.parseInt(strId);
-        sc.delete(id);
+        sr.delete(id);
         response.sendRedirect("skill");
     }
 

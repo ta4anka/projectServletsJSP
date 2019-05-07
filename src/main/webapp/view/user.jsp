@@ -1,7 +1,9 @@
 <%@ page import="model.User" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Skill" %>
-<%@ page import="controller.SkillController" %><%--
+
+<%@ page import="repository.SkillRepository" %>
+<%@ page import="repository.hibernate.HibernateSkillRepositoryImpl" %><%--
   Created by IntelliJ IDEA.
   User: maya
   Date: 06.05.19
@@ -34,8 +36,8 @@
 
             <label>Skills:
                 <table>
-                <% SkillController sc = new SkillController();
-                List<Skill> skills = sc.findAll();
+                <% SkillRepository sr = new HibernateSkillRepositoryImpl();
+                List<Skill> skills = sr.findAll();
                 for (Skill s : skills){ %>
                     <tr>
                         <td><input type="checkbox" name="names" value ="<%=s.getId()%>"><%=s.getName()%></td>

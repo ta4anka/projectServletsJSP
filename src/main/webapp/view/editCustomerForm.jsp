@@ -1,5 +1,7 @@
-<%@ page import="controller.CustomerController" %>
-<%@ page import="model.Customer" %><%--
+
+<%@ page import="model.Customer" %>
+<%@ page import="repository.CustomerRepository" %>
+<%@ page import="repository.hibernate.HibernateCustomerRepositoryImpl" %><%--
   Created by IntelliJ IDEA.
   User: maya
   Date: 06.05.19
@@ -18,9 +20,9 @@
 
         <table border="1" cellpadding="10">
             <caption><h3>Edit Customer</h3></caption>
-            <% CustomerController sc =new CustomerController();
+            <% CustomerRepository cr =new HibernateCustomerRepositoryImpl();
                 int idForEdit = Integer.parseInt(request.getParameter("customerId"));
-                Customer customerForEdit = sc.getById(idForEdit);%>
+                Customer customerForEdit = cr.getById(idForEdit);%>
             <tr>
                 <th>id of customer:</th>
                 <td>

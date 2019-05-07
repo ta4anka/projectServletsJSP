@@ -1,5 +1,6 @@
-<%@ page import="controller.UserController" %>
-<%@ page import="model.User" %><%--
+<%@ page import="model.User" %>
+<%@ page import="repository.UserRepository" %>
+<%@ page import="repository.hibernate.HibernateUserRepositoryImpl" %><%--
   Created by IntelliJ IDEA.
   User: maya
   Date: 06.05.19
@@ -18,9 +19,9 @@
 
         <table border="1" cellpadding="10">
             <caption><h3>Edit user</h3></caption>
-            <% UserController sc =new UserController();
+            <% UserRepository sr =new HibernateUserRepositoryImpl();
                 int idForEdit = Integer.parseInt(request.getParameter("userId"));
-                User userForEdit = sc.getById(idForEdit);%>
+                User userForEdit = sr.getById(idForEdit);%>
             <tr>
                 <th>Id of user:</th>
                 <td>

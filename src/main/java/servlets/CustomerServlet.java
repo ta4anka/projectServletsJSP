@@ -1,9 +1,12 @@
 package servlets;
 
-import controller.CustomerController;
-import controller.ProjectController;
+
 import model.Customer;
 import model.Project;
+import repository.CustomerRepository;
+import repository.ProjectRepository;
+import repository.hibernate.HibernateCustomerRepositoryImpl;
+import repository.hibernate.HibernateProjectRepositoryImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 public class CustomerServlet extends HttpServlet {
-    CustomerController cc = new CustomerController();
+    CustomerRepository cr = new HibernateCustomerRepositoryImpl();
     Customer customerToSave = new Customer();
 
 
@@ -51,7 +54,7 @@ public class CustomerServlet extends HttpServlet {
     }
 
     private void listCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Customer> CustomerList = cc.findAll();
+        List<Customer> CustomerList = cr.findAll();
         request.setAttribute("listOfCustomer",CustomerList);
         RequestDispatcher requestDispatcher  = request.getRequestDispatcher("view/customer.jsp");
         requestDispatcher.forward(request,response);
@@ -60,7 +63,7 @@ public class CustomerServlet extends HttpServlet {
     private void addCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String name = request.getParameter("nameOfCustomer");
 
-        ProjectController sc = new ProjectController();
+        ProjectRepository pr = new HibernateProjectRepositoryImpl();
 
         // ---Adding projects---:
         String[] arrayOfId = request.getParameterValues("names");
@@ -73,13 +76,13 @@ public class CustomerServlet extends HttpServlet {
 
         Set<Project> projectSet = new HashSet<>();
         for (Integer id : idSetInteger) {
-            Project projectToSave = sc.getById(id);
+            Project projectToSave = pr.getById(id);
             projectSet.add(projectToSave);
         }
 
         customerToSave.setName(name);
         customerToSave.setProjects(projectSet);
-        cc.save(customerToSave);
+        cr.save(customerToSave);
         response.sendRedirect("customer");
     }
 
@@ -93,7 +96,7 @@ public class CustomerServlet extends HttpServlet {
         String nameOfUpdatedCustomer = request.getParameter("nameOfUpdatedCustomer");
         customerToSave.setId(id);
         customerToSave.setName(nameOfUpdatedCustomer);
-        cc.update(customerToSave);
+        cr.update(customerToSave);
         response.sendRedirect("customer");
     }
 
@@ -101,7 +104,7 @@ public class CustomerServlet extends HttpServlet {
     private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String strId = request.getParameter("customerId");
         int id = Integer.parseInt(strId);
-        cc.delete(id);
+        cr.delete(id);
         response.sendRedirect("customer");
     }
 }

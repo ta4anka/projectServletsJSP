@@ -1,5 +1,6 @@
-<%@ page import="controller.TeamController" %>
-<%@ page import="model.Team" %><%--
+<%@ page import="model.Team" %>
+<%@ page import="repository.TeamRepository" %>
+<%@ page import="repository.hibernate.HibernateTeamRepositoryImpl" %><%--
   Created by IntelliJ IDEA.
   User: maya
   Date: 06.05.19
@@ -18,9 +19,9 @@
 
         <table border="1" cellpadding="10">
             <caption><h3>Edit Team</h3></caption>
-            <% TeamController sc =new TeamController();
+            <% TeamRepository tr =new HibernateTeamRepositoryImpl();
                 int idForEdit = Integer.parseInt(request.getParameter("teamId"));
-                Team teamForEdit = sc.getById(idForEdit);%>
+                Team teamForEdit = tr.getById(idForEdit);%>
             <tr>
                 <th>id of team:</th>
                 <td>

@@ -1,11 +1,14 @@
 package servlets;
 
 
-import controller.TeamController;
-import controller.UserController;
+
 
 import model.Team;
 import model.User;
+import repository.TeamRepository;
+import repository.UserRepository;
+import repository.hibernate.HibernateTeamRepositoryImpl;
+import repository.hibernate.HibernateUserRepositoryImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TeamServlet extends HttpServlet {
-    TeamController tc = new TeamController();
+    TeamRepository tr = new HibernateTeamRepositoryImpl();
     Team teamToSave = new Team();
 
 
@@ -53,7 +56,7 @@ public class TeamServlet extends HttpServlet {
     }
 
     private void listTeam(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Team> TeamList = tc.findAll();
+        List<Team> TeamList = tr.findAll();
         request.setAttribute("listOfTeam",TeamList);
         RequestDispatcher requestDispatcher  = request.getRequestDispatcher("view/team.jsp");
         requestDispatcher.forward(request,response);
@@ -62,7 +65,7 @@ public class TeamServlet extends HttpServlet {
     private void addTeam(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String name = request.getParameter("nameOfTeam");
 
-        UserController sc = new UserController();
+        UserRepository sr = new HibernateUserRepositoryImpl();
 
         // ---Adding users---:
         String[] arrayOfId = request.getParameterValues("names");
@@ -75,13 +78,13 @@ public class TeamServlet extends HttpServlet {
 
         Set<User> userSet = new HashSet<>();
         for (Integer id : idSetInteger) {
-            User userToSave = sc.getById(id);
+            User userToSave = sr.getById(id);
             userSet.add(userToSave);
         }
 
         teamToSave.setName(name);
         teamToSave.setUsers(userSet);
-        tc.save(teamToSave);
+        tr.save(teamToSave);
         response.sendRedirect("team");
     }
 
@@ -95,7 +98,7 @@ public class TeamServlet extends HttpServlet {
         String nameOfUpdatedTeam = request.getParameter("nameOfUpdatedTeam");
         teamToSave.setId(id);
         teamToSave.setName(nameOfUpdatedTeam);
-        tc.update(teamToSave);
+        tr.update(teamToSave);
         response.sendRedirect("team");
     }
 
@@ -103,7 +106,7 @@ public class TeamServlet extends HttpServlet {
     private void deleteTeam(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String strId = request.getParameter("teamId");
         int id = Integer.parseInt(strId);
-        tc.delete(id);
+        tr.delete(id);
         response.sendRedirect("team");
     }
 }

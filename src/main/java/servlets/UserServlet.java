@@ -1,9 +1,13 @@
 package servlets;
 
-import controller.SkillController;
-import controller.UserController;
+
+
 import model.Skill;
 import model.User;
+import repository.SkillRepository;
+import repository.UserRepository;
+import repository.hibernate.HibernateSkillRepositoryImpl;
+import repository.hibernate.HibernateUserRepositoryImpl;
 
 
 import javax.servlet.RequestDispatcher;
@@ -18,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 public class UserServlet extends HttpServlet {
-    private UserController uc = new UserController();
+    private UserRepository ur = new HibernateUserRepositoryImpl();
     private User userToSave = new User();
 
 
@@ -30,7 +34,6 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String button = request.getParameter("button");
-        System.out.println("button = " + button);
 
         switch(button){
             case "add":
@@ -50,14 +53,14 @@ public class UserServlet extends HttpServlet {
     }
 
     private void listUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<User> userList = uc.findAll();
+        List<User> userList = ur.findAll();
         request.setAttribute("listOfUser",userList);
         RequestDispatcher requestDispatcher  = request.getRequestDispatcher("view/user.jsp");
         requestDispatcher.forward(request,response);
     }
 
     private void addUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        SkillController sc = new SkillController();
+        SkillRepository sr = new HibernateSkillRepositoryImpl();
 
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
@@ -73,7 +76,7 @@ public class UserServlet extends HttpServlet {
 
         Set<Skill> skillSet = new HashSet<>();
         for (Integer id : idSetInteger) {
-            Skill skillToSave = sc.getById(id);
+            Skill skillToSave = sr.getById(id);
             skillSet.add(skillToSave);
         }
             // ------------------------;
@@ -82,7 +85,7 @@ public class UserServlet extends HttpServlet {
         userToSave.setLastName(lastName);
         userToSave.setSpecialty(specialty);
         userToSave.setSkills(skillSet);
-        uc.save(userToSave);
+        ur.save(userToSave);
         response.sendRedirect("user");
     }
 
@@ -101,14 +104,14 @@ public class UserServlet extends HttpServlet {
         userToSave.setFirstName(firstName);
         userToSave.setLastName(lastName);
         userToSave.setSpecialty(specialty);
-        uc.update(userToSave);
+        ur.update(userToSave);
         response.sendRedirect("user");
     }
 
     private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String strId = request.getParameter("userId");
         int id = Integer.parseInt(strId);
-        uc.delete(id);
+        ur.delete(id);
         response.sendRedirect("user");
     }
 

@@ -1,7 +1,9 @@
-<%@ page import="controller.ProjectController" %>
+
 <%@ page import="model.Project" %>
 <%@ page import="java.util.List" %>
-<%@ page import="model.Customer" %><%--
+<%@ page import="model.Customer" %>
+<%@ page import="repository.ProjectRepository" %>
+<%@ page import="repository.hibernate.HibernateProjectRepositoryImpl" %><%--
   Created by IntelliJ IDEA.
   Project: maya
   Date: 06.05.19
@@ -29,8 +31,8 @@
 
         <label>Projects for customer:
             <table>
-                <% ProjectController uc = new ProjectController();
-                    List<Project> projects = uc.findAll();
+                <% ProjectRepository pr = new HibernateProjectRepositoryImpl();
+                    List<Project> projects = pr.findAll();
                     for (Project p : projects){ %>
                 <tr>
                     <td><input type="checkbox" name="names" value ="<%=p.getId()%>"><%=p.getName()%></td>

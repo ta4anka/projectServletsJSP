@@ -1,5 +1,6 @@
 <%@ page import="model.Skill" %>
-<%@ page import="controller.SkillController" %><%--
+<%@ page import="repository.SkillRepository" %>
+<%@ page import="repository.hibernate.HibernateSkillRepositoryImpl" %><%--
   Created by IntelliJ IDEA.
   User: maya
   Date: 05.05.19
@@ -18,9 +19,9 @@
 
         <table border="1" cellpadding="10">
                 <caption><h3>Edit skill</h3></caption>
-            <% SkillController sc =new SkillController();
+            <% SkillRepository sr =new HibernateSkillRepositoryImpl();
                     int idForEdit = Integer.parseInt(request.getParameter("skillId"));
-                    Skill skillForEdit = sc.getById(idForEdit);%>
+                    Skill skillForEdit = sr.getById(idForEdit);%>
             <tr>
                 <th>id of skill:</th>
                 <td>

@@ -1,9 +1,12 @@
 package servlets;
 
-import controller.ProjectController;
-import controller.TeamController;
+
 import model.Project;
 import model.Team;
+import repository.ProjectRepository;
+import repository.TeamRepository;
+import repository.hibernate.HibernateProjectRepositoryImpl;
+import repository.hibernate.HibernateTeamRepositoryImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ProjectServlet extends HttpServlet {
-    ProjectController pc = new ProjectController();
+    ProjectRepository pr = new HibernateProjectRepositoryImpl();
     Project projectToSave = new Project();
 
 
@@ -52,7 +55,7 @@ public class ProjectServlet extends HttpServlet {
     }
 
     private void listProject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Project> ProjectList = pc.findAll();
+        List<Project> ProjectList = pr.findAll();
         request.setAttribute("listOfProject",ProjectList);
         RequestDispatcher requestDispatcher  = request.getRequestDispatcher("view/project.jsp");
         requestDispatcher.forward(request,response);
@@ -62,7 +65,7 @@ public class ProjectServlet extends HttpServlet {
         String name = request.getParameter("nameOfProject");
         BigDecimal budget = new BigDecimal(request.getParameter("budget"));
 
-        TeamController tc = new TeamController();
+        TeamRepository tr = new HibernateTeamRepositoryImpl();
 
         // ---Adding teams---:
         String[] arrayOfId = request.getParameterValues("names");
@@ -75,7 +78,7 @@ public class ProjectServlet extends HttpServlet {
 
         Set<Team> teamSet = new HashSet<>();
         for (Integer id : idSetInteger) {
-            Team teamToSave = tc.getById(id);
+            Team teamToSave = tr.getById(id);
             teamSet.add(teamToSave);
         }
 
@@ -83,7 +86,7 @@ public class ProjectServlet extends HttpServlet {
         projectToSave.setName(name);
         projectToSave.setBudget(budget);
         projectToSave.setTeams(teamSet);
-        pc.save(projectToSave);
+        pr.save(projectToSave);
         response.sendRedirect("project");
     }
 
@@ -100,7 +103,7 @@ public class ProjectServlet extends HttpServlet {
         projectToSave.setId(id);
         projectToSave.setName(nameOfUpdatedProject);
         projectToSave.setBudget(budget);
-        pc.update(projectToSave);
+        pr.update(projectToSave);
         response.sendRedirect("project");
     }
 
@@ -108,7 +111,7 @@ public class ProjectServlet extends HttpServlet {
     private void deleteProject(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String strId = request.getParameter("projectId");
         int id = Integer.parseInt(strId);
-        pc.delete(id);
+        pr.delete(id);
         response.sendRedirect("project");
     }
 }
